@@ -12,7 +12,7 @@ app.use(bodyParser.json());
  * DATABASE *
  ************/
 
-// var db = require('./models');
+var db = require('./models');
 
 /**********
  * ROUTES *
@@ -31,22 +31,89 @@ app.get('/', function homepage(req, res) {
 });
 
 
+
 /*
  * JSON API Endpoints
  */
 
+
+
 app.get('/api', function api_index(req, res) {
   // TODO: Document all your api endpoints below
   res.json({
-   
-    message: "Welcome to my personal api! Here's what you need to know!",  //personal message from my personal api
-    documentation_url: "https://github.com/example-username/express_self_api/README.md", // CHANGE ME to link to my git hub repo
-    base_url: "http://YOUR-APP-NAME.herokuapp.com", // CHANGE ME to link to heroku app
+    woops_i_has_forgot_to_document_all_my_endpoints: false,
+    message: "Welcome to my remy's awesome api",
+    documentation_url: "https://github.com/rover33/express-personal-api/blob/master/README.md",
+    base_url: "https://tranquil-brushlands-55213.herokuapp.com/",
     endpoints: [
-      {method: "GET", path: "/api", description: "Describes all available endpoints"}, 
-      {method: "GET", path: "/api/profile", description: "Data about me"}, // CHANGE ME
-      {method: "POST", path: "/api/campsites", description: "E.g. Create a new campsite"} // CHANGE ME
+      {method: "GET", path: "/api", description: "Describes all available endpoints"},
+      {method: "GET", path: "/api/profile", description: "Data about REMY PEARLSTONE"},
+      {method: "POST", path: "/api/music", description: "E.g. Create new music artists"} 
     ]
+  })
+});
+
+
+app.get('/api/profile', function(req,res){
+  res.json({
+    name: "Remy Pearlstone",
+    github_link: "https://github.com/rover33/",
+    github_profile_image: "https://avatars3.githubusercontent.com/u/17019181?s=400&v=4",
+    current_city: 'Denver', 
+    pets:[{name: "jin", species: "humanoid"}, {name: "kevin james", species: "Wanabe"}]
+  })
+})
+
+
+//index
+app.get('/api/music', function(req,res){
+  db.music.find(function(err, music){
+    if (err) {
+      return console.log ("Error:", err)
+    }
+    res.json(music)
+  })
+
+})
+
+//show
+app.get('/api/music/:id', function(req,res){
+  db.music.findById(req.params.id, function(err, music){
+    if (err) {return console.log("You are fucked:", + err)}
+    res.json(music);
+  })
+})
+//create
+app.post('/api/music', function(req,res){
+  var newMusic = new db.music({
+    name: req.body.name,
+    songName: req.body.songName,
+  })
+
+  newMusic.save(function(err, music){
+    if (err) {
+      return console.log("create error: " + err);
+    }
+    console.log("created ", music.name);
+    res.json(music);
+  });
+});
+
+//update
+app.put('/api/music/:id', function(req, res){
+  db.music.findOneAndUpdate({_id: req.params.id }, {$set: {name: req.body.name, songName: req.body.songName}}, {new: true}, function(err, music){
+    if (err) {return console.log("You failed:", + err)}
+    res.json(music);
+  })
+})
+
+//delete
+app.delete('/api/music/:id', function (req, res) {
+  console.log(req.params)
+  var musicId = req.params.id;
+
+  db.music.findOneAndRemove({ _id: musicId }, function (err, deletedMusic) {
+    res.json(deletedMusic);
   });
 });
 
