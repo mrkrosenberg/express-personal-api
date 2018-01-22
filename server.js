@@ -42,12 +42,12 @@ app.get('/api', function api_index(req, res) {
   // TODO: Document all your api endpoints below
   res.json({
     woops_i_has_forgot_to_document_all_my_endpoints: false,
-    message: "Welcome to my remy's awesome api",
-    documentation_url: "https://github.com/rover33/express-personal-api/blob/master/README.md",
-    base_url: "https://tranquil-brushlands-55213.herokuapp.com/",
+    message: "Mark Rosenberg's API",
+    documentation_url: "https://github.com/mrkrosenberg",
+    base_url: "https://git.heroku.com/immense-sea-47144.git",
     endpoints: [
       {method: "GET", path: "/api", description: "Describes all available endpoints"},
-      {method: "GET", path: "/api/profile", description: "Data about REMY PEARLSTONE"},
+      {method: "GET", path: "/api/profile", description: "Data about Mark Rosenberg"},
       {method: "POST", path: "/api/music", description: "E.g. Create new music artists"} 
     ]
   })
@@ -57,10 +57,10 @@ app.get('/api', function api_index(req, res) {
 app.get('/api/profile', function(req,res){
   res.json({
     name: "Remy Pearlstone",
-    github_link: "https://github.com/rover33/",
-    github_profile_image: "https://avatars3.githubusercontent.com/u/17019181?s=400&v=4",
+    github_link: "https://github.com/mrkrosenberg/",
+    github_profile_image: "",
     current_city: 'Denver', 
-    pets:[{name: "jin", species: "humanoid"}, {name: "kevin james", species: "Wanabe"}]
+    pets:[{name: "Macdawg", species: "dire-wolf"}, {name: "Lupine Whisker-lickens", species: "sabretooth tiger"}]
   })
 })
 
@@ -79,7 +79,7 @@ app.get('/api/music', function(req,res){
 //show
 app.get('/api/music/:id', function(req,res){
   db.music.findById(req.params.id, function(err, music){
-    if (err) {return console.log("You are fucked:", + err)}
+    if (err) {return console.log("Error:", + err)}
     res.json(music);
   })
 })
@@ -102,7 +102,7 @@ app.post('/api/music', function(req,res){
 //update
 app.put('/api/music/:id', function(req, res){
   db.music.findOneAndUpdate({_id: req.params.id }, {$set: {name: req.body.name, songName: req.body.songName}}, {new: true}, function(err, music){
-    if (err) {return console.log("You failed:", + err)}
+    if (err) {return console.log("Error:", + err)}
     res.json(music);
   })
 })
